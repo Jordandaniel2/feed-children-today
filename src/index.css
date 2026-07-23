@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 18 90% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 42 95% 55%;
+    --accent: 30 85% 45%;
+    --background: 36 30% 97%;
+    --foreground: 20 30% 15%;
+    --muted: 30 20% 90%;
+    --shadow-warm: 0 10px 40px rgba(230, 126, 34, 0.15);
+    --shadow-glow: 0 0 30px rgba(230, 126, 34, 0.4);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-warm hover:shadow-glow cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-secondary text-foreground rounded-lg font-semibold hover:bg-opacity-90 transition-all duration-200;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-200;
+  }
+
+  .section {
+    @apply py-16 md:py-20 px-4 md:px-8;
+  }
+
+  .container-max {
+    @apply max-w-6xl mx-auto;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-warm p-6 transition-all duration-300 hover:shadow-glow;
+  }
+
+  .heading-lg {
+    @apply text-4xl md:text-5xl font-bold text-foreground;
+  }
+
+  .heading-md {
+    @apply text-2xl md:text-3xl font-bold text-foreground;
+  }
+
+  .heading-sm {
+    @apply text-xl md:text-2xl font-semibold text-foreground;
+  }
+
+  .text-muted {
+    @apply text-gray-600;
+  }
+}
