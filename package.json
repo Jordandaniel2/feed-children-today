@@ -1,7 +1,6 @@
 {
   "name": "feed-children-today",
   "version": "1.0.0",
-  "description": "Charity website for FEED the CHILDREN TODAY - founded by Jordan Daniel",
   "type": "module",
   "scripts": {
     "dev": "vite",
