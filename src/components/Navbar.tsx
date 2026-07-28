@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import logo from '../assets/logo.jpg'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -8,7 +9,6 @@ const Navbar = () => {
     { label: 'About', href: '#about' },
     { label: 'How It Works', href: '#how-it-works' },
     { label: 'Impact', href: '#impact' },
-    { label: 'Donate', href: '#donate' },
     { label: 'Contact', href: '#contact' },
   ]
 
@@ -16,9 +16,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-muted shadow-warm">
       <div className="container-max px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">F</span>
-          </div>
+          <img src={logo} alt="FEED the CHILDREN TODAY logo" className="w-10 h-10 rounded-lg object-cover shadow-warm" />
           <h1 className="font-bold text-lg hidden sm:block">FEED the CHILDREN TODAY</h1>
         </div>
 
@@ -33,7 +31,7 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <button className="btn-primary text-sm">Donate</button>
+          <a href="#donate" className="btn-primary text-sm">Donate</a>
         </div>
 
         {/* Mobile Menu Button */}
@@ -59,7 +57,7 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <button className="btn-primary w-full">Donate</button>
+          <a href="#donate" className="btn-primary w-full text-center" onClick={() => setIsOpen(false)}>Donate</a>
         </div>
       )}
     </nav>
