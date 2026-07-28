@@ -1,4 +1,4 @@
-import { Heart, Mail, Phone, MapPin } from 'lucide-react'
+import { Heart, Mail, Phone } from 'lucide-react'
 
 const FooterSection = () => {
   return (
