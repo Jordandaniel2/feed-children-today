@@ -174,13 +174,7 @@ src/
 
 ## 💡 How Donations Work
 
-This is a **frontend-only showcase** - no backend is currently connected. The donation form demonstrates:
-- Amount selection
-- Payment method switching
-- Form validation
-- Success notifications
-
-To integrate real payments, connect:
+A **backend** to integrate real payments, connect:
 - Stripe/Payment Gateway for gift cards
 - Apple Pay API
 - Crypto payment processors (Coinbase Commerce, BTCPay, etc.)
@@ -221,8 +215,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Contact
 
-- **Email**: hello@feedchildren.today
-- **Phone**: +1 (234) 567-890
+- **Email**: jordandanielreal001@gmail.com
+- **Phone**: +1 (469) 505-6498
 - **GitHub**: [@Jordandaniel2](https://github.com/Jordandaniel2)
 
 ## 🙏 Support
