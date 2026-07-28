@@ -10,7 +10,7 @@ const HowItWorksSection = () => {
     {
       icon: CreditCard,
       title: 'Select Payment Method',
-      description: 'Use gift cards, Apple Pay, or cryptocurrency for easy and secure donations.',
+      description: 'Pay securely by card, Apple Pay, or Google Pay in just a few taps.',
     },
     {
       icon: Heart,

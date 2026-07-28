@@ -10,10 +10,7 @@ Every child deserves a full plate. FEED the CHILDREN TODAY is dedicated to elimi
 
 - 🎨 Beautiful warm & hopeful design system
 - 📱 Fully responsive mobile-first layout
-- 💳 Multiple donation methods:
-  - Gift Cards (Apple, Amazon, Google Play)
-  - Apple Pay
-  - Cryptocurrency (Bitcoin, Ethereum, USDC)
+- 💳 Real, secure donations via Stripe Checkout (cards, Apple Pay, Google Pay)
 - 📊 Animated impact statistics & progress tracking
 - ⚡ Lightning-fast performance with Vite
 - ♿ Accessible components
@@ -114,13 +111,15 @@ src/
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "lucide-react": "^0.378.0"
+    "lucide-react": "^0.378.0",
+    "stripe": "^17.4.0"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
     "vite": "^5.0.8",
     "tailwindcss": "^3.3.6",
-    "@vitejs/plugin-react": "^4.2.1"
+    "@vitejs/plugin-react": "^4.2.1",
+    "@netlify/functions": "^2.8.2"
   }
 }
 ```
@@ -155,10 +154,7 @@ src/
 ### 6. Donate Section
 - Preset donation amounts ($10, $25, $50, $100)
 - Custom amount input
-- Multi-tab payment methods:
-  - **Gift Cards** - Enter card codes
-  - **Apple Pay** - One-click payment
-  - **Crypto** - Copy wallet addresses
+- Real checkout powered by Stripe, supporting cards, Apple Pay, and Google Pay
 
 ### 7. Testimonials
 - Real donor stories
@@ -174,10 +170,13 @@ src/
 
 ## 💡 How Donations Work
 
-A **backend** to integrate real payments, connect:
-- Stripe/Payment Gateway for gift cards
-- Apple Pay API
-- Crypto payment processors (Coinbase Commerce, BTCPay, etc.)
+Donations are processed through a Netlify Function (`netlify/functions/create-checkout-session.mts`) that creates a
+Stripe Checkout session and redirects the donor to Stripe's hosted, secure payment page. Stripe Checkout automatically
+offers Apple Pay and Google Pay wallet buttons on supported devices in addition to card payments.
+
+To go live, set a `STRIPE_SECRET_KEY` environment variable (from the [Stripe Dashboard](https://dashboard.stripe.com/apikeys))
+in your Netlify site's environment variables. No client-side key is required since checkout uses a redirect to a
+Stripe-hosted URL.
 
 ## 📱 Responsive Design
 

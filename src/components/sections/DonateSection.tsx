@@ -1,27 +1,52 @@
-import { useState } from 'react'
-import { Copy, Check } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { CheckCircle2, Loader2 } from 'lucide-react'
 
 const DonateSection = () => {
-  const [activeTab, setActiveTab] = useState('gifts')
   const [amount, setAmount] = useState('50')
-  const [copied, setCopied] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [status, setStatus] = useState<'success' | 'cancelled' | null>(null)
 
   const presetAmounts = [10, 25, 50, 100]
 
-  const cryptoWallets = {
-    bitcoin: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-    ethereum: '0x1234567890123456789012345678901234567890',
-    usdc: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  }
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const donation = params.get('donation')
+    if (donation === 'success' || donation === 'cancelled') {
+      setStatus(donation)
+      params.delete('donation')
+      const query = params.toString()
+      window.history.replaceState({}, '', `${window.location.pathname}${query ? `?${query}` : ''}#donate`)
+    }
+  }, [])
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+  const handleDonate = async () => {
+    setError('')
+    const numericAmount = Number(amount)
 
-  const handleDonate = () => {
-    alert(`Thank you for your donation of $${amount}! This is a demo - no actual payment was processed.`)
+    if (!Number.isFinite(numericAmount) || numericAmount < 1) {
+      setError('Enter an amount of at least $1')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: numericAmount }),
+      })
+      const data = await response.json()
+
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || 'Unable to start checkout')
+      }
+
+      window.location.href = data.url
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (
@@ -29,6 +54,22 @@ const DonateSection = () => {
       <div className="container-max px-4">
         <h2 className="heading-md text-center mb-12 animate-fade-up">Make a Donation</h2>
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-glow p-8 animate-fade-up">
+          {status === 'success' && (
+            <div className="mb-8 flex items-center gap-3 bg-green-50 text-green-800 border border-green-200 rounded-lg p-4">
+              <CheckCircle2 size={22} className="shrink-0" />
+              <p className="text-sm font-medium">
+                Thank you! Your donation was received and will help feed a child today.
+              </p>
+            </div>
+          )}
+          {status === 'cancelled' && (
+            <div className="mb-8 bg-muted rounded-lg p-4">
+              <p className="text-sm font-medium text-foreground/70">
+                Checkout was cancelled. No payment was taken — feel free to try again whenever you're ready.
+              </p>
+            </div>
+          )}
+
           {/* Amount Selection */}
           <div className="mb-8">
             <label className="block text-sm font-semibold mb-4">Select Amount</label>
@@ -51,6 +92,7 @@ const DonateSection = () => {
               <span className="text-lg font-semibold">$</span>
               <input
                 type="number"
+                min="1"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Custom amount"
@@ -59,78 +101,26 @@ const DonateSection = () => {
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="mb-8">
-            <div className="flex gap-4 border-b border-muted mb-6">
-              {['gifts', 'apple', 'crypto'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`pb-4 font-semibold transition-colors ${
-                    activeTab === tab
-                      ? 'text-primary border-b-2 border-primary'
-                      : 'text-foreground/50 hover:text-foreground'
-                  }`}
-                >
-                  {tab === 'gifts' && 'Gift Cards'}
-                  {tab === 'apple' && 'Apple Pay'}
-                  {tab === 'crypto' && 'Cryptocurrency'}
-                </button>
-              ))}
-            </div>
-
-            {/* Gift Cards Tab */}
-            {activeTab === 'gifts' && (
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Enter gift card code"
-                  className="w-full px-4 py-2 border border-muted rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <p className="text-sm text-foreground/60">Accepted: Apple, Amazon, Google Play</p>
-              </div>
-            )}
-
-            {/* Apple Pay Tab */}
-            {activeTab === 'apple' && (
-              <div className="text-center py-6">
-                <button className="btn-primary mx-auto">Pay with Apple Pay</button>
-                <p className="text-sm text-foreground/60 mt-4">Click to open Apple Pay on your device</p>
-              </div>
-            )}
-
-            {/* Crypto Tab */}
-            {activeTab === 'crypto' && (
-              <div className="space-y-4">
-                {Object.entries(cryptoWallets).map(([coin, address]) => (
-                  <div key={coin} className="bg-muted rounded-lg p-4">
-                    <label className="block text-sm font-semibold mb-2 capitalize">{coin}</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={address}
-                        readOnly
-                        className="flex-1 px-3 py-2 bg-background rounded border border-background text-xs overflow-hidden"
-                      />
-                      <button
-                        onClick={() => handleCopy(address)}
-                        className="btn-primary flex items-center gap-2 text-sm px-4"
-                      >
-                        {copied ? <Check size={16} /> : <Copy size={16} />}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {error && (
+            <p className="text-sm text-red-600 mb-4 text-center">{error}</p>
+          )}
 
           {/* Donate Button */}
-          <button onClick={handleDonate} className="btn-primary w-full text-lg py-4">
-            Donate ${amount}
+          <button
+            onClick={handleDonate}
+            disabled={loading}
+            className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2 disabled:opacity-70"
+          >
+            {loading ? (
+              <>
+                <Loader2 size={20} className="animate-spin" /> Redirecting to secure checkout...
+              </>
+            ) : (
+              `Donate $${amount || 0}`
+            )}
           </button>
           <p className="text-center text-sm text-foreground/50 mt-4">
-            This is a demo. No actual payment will be processed.
+            Secure checkout powered by Stripe · Accepts major cards, Apple Pay & Google Pay
           </p>
         </div>
       </div>

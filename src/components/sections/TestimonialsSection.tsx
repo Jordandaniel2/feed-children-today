@@ -10,7 +10,7 @@ const TestimonialsSection = () => {
       name: 'Marcus Williams',
       city: 'Los Angeles, CA',
       initials: 'MW',
-      quote: 'Being able to donate with crypto feels modern and transparent. I trust Jordan\'s mission completely.',
+      quote: 'Checking out with Apple Pay took seconds. I trust Jordan\'s mission completely.',
     },
     {
       name: 'Emma Chen',
@@ -40,7 +40,7 @@ const TestimonialsSection = () => {
                   <p className="text-sm text-foreground/60">{testimonial.city}</p>
                 </div>
               </div>
-              <p className="text-foreground/80 italic">\"${testimonial.quote}\"</p>
+              <p className="text-foreground/80 italic">"{testimonial.quote}"</p>
             </div>
           ))}
         </div>
